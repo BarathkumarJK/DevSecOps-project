@@ -15,7 +15,7 @@ pipeline {
  
         stage("Git Checkout"){
             steps{
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/jkbarathkumar/devsecops'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/barathkumarjk/devsecops'
             }
         }
         stage('Secrets Scan') {
@@ -67,7 +67,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t barathkumar29/devsecops-java:v1 .'
+                sh 'docker build -t yourdockerhub/devsecops-java:v1 .'
             }
         }
         stage('Push to DockerHub') {
@@ -75,7 +75,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push barathkumar29/devsecops-java:v1
+                    docker push yourdockerhub/devsecops-java:v1
                     '''
                 }
             }
@@ -83,7 +83,7 @@ pipeline {
  
         stage("TRIVY"){
             steps{
-                sh "trivy image barathkumar29/devsecops-java:v1"
+                sh "trivy image yourdockerhub/devsecops-java:v1"
             }
         }
  
